@@ -21,10 +21,16 @@ public class Simulator
     // The probability that a fox will be created in any given grid position.
     private static final double FOX_CREATION_PROBABILITY = 0.02;
     // The probability that a rabbit will be created in any given grid position.
-    private static final double RABBIT_CREATION_PROBABILITY = 0.08;    
+    private static final double RABBIT_CREATION_PROBABILITY = 0.08;
+    // The probability that a bear will be created in any given grid position.
+    private static final double BEAR_CREATION_PROBABILITY = 0.05;
+    // The probability that a bear will be created in any given grid position.
+    private static final double HUNTER_CREATION_PROBABILITY = 0.01; 
 
     // List of animals in the field.
     private static List<Animal> animals;
+    // List of animals in the field.
+    private static List<Hunter> hunters;
     // The current state of the field.
     private static Field field;
     // The current step of the simulation.
@@ -63,12 +69,15 @@ public class Simulator
         }
         
         Simulator.animals = new ArrayList<Animal>();
+        Simulator.hunters = new ArrayList<Hunter>();
         Simulator.field = new Field(depth, width);
 
         // Create a view of the state of each location in the field.
         Simulator.view = new SimulatorView(depth, width);
         Simulator.view.setColor(Rabbit.class, Color.orange);
         Simulator.view.setColor(Fox.class, Color.blue);
+        Simulator.view.setColor(Bear.class, Color.red);
+        Simulator.view.setColor(Hunter.class, Color.black);
         
         // Setup a valid starting point.
         reset();
@@ -105,14 +114,35 @@ public class Simulator
         Simulator.step++;
 
         // Provide space for newborn animals.
-        List<Animal> newAnimals = new ArrayList<Animal>();        
-        // Let all rabbits act.
-        for(Iterator<Animal> it = Simulator.animals.iterator(); it.hasNext(); ) {
-            Animal animal = it.next();
-            animal.act(newAnimals);
-            if(! animal.isAlive()) {
-                it.remove();
+        List<Animal> newAnimals = new ArrayList<Animal>(); 
+        
+        try {
+	        // Let all rabbits act.
+	        for(Iterator<Animal> it = Simulator.animals.iterator(); it.hasNext(); ) {
+	            Animal animal = it.next();
+	            animal.act(newAnimals);
+	            if(! animal.isAlive()) {
+	                it.remove();
+	            }
+	        }
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+        
+        
+        try {
+            // Let all rabbits act.
+            for(Iterator<Hunter> it = Simulator.hunters.iterator(); it.hasNext(); ) {
+                Hunter hunter = it.next();
+                hunter.act();
+                if(! hunter.isAlive()) {
+                    it.remove();
+                }
             }
+        }
+        catch (Exception e) {
+        	System.out.println(e);
         }
                
         // Add the newly born foxes and rabbits to the main lists.
@@ -153,7 +183,16 @@ public class Simulator
                     Rabbit rabbit = new Rabbit(true, Simulator.field, location);
                     Simulator.animals.add(rabbit);
                 }
-                // else leave the location empty.
+                else if(rand.nextDouble() <= BEAR_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Bear bear = new Bear(true, Simulator.field, location);
+                    Simulator.animals.add(bear);
+                }
+                else if(rand.nextDouble() <= HUNTER_CREATION_PROBABILITY) {
+                    Location location = new Location(row, col);
+                    Hunter hunter = new Hunter(true, Simulator.field, location);
+                    Simulator.hunters.add(hunter);
+                }
             }
         }
     }
@@ -169,7 +208,7 @@ public class Simulator
     		public void run(){
     			run = true;
     			while(run && step < steps){
-    				simulateOneStep();
+    				simulate(1);
     			}
     		}
     	});

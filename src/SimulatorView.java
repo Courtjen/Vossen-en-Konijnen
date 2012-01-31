@@ -201,21 +201,28 @@ public class SimulatorView extends JPanel implements ActionListener
 	private JMenuBar makeMenuBar(){
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu menuMenu1 = new JMenu("Menu1");
-		JMenuItem openItem = new JMenuItem("Openen");
-		openItem.addActionListener(this);
-		menuMenu1.add(openItem);
-		JMenuItem quitItem = new JMenuItem("Afsluiten");
-		quitItem.addActionListener(this);
+		JMenu menuMenu1 = new JMenu("Bestand");
+		final JMenuItem quitItem = new JMenuItem("Afsluiten");
+		quitItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if (quitItem.getActionCommand() == "Afsluiten"){
+					System.exit(1);
+				}
+			}
+		});
+		
 		menuMenu1.add(quitItem);
 		menuBar.add(menuMenu1);
-		JMenu menuMenu2 = new JMenu("Menu2");
-		JMenuItem menu2Item = new JMenuItem("Menu2Item");
-		menuMenu2.add(menu2Item);
-		menuBar.add(menuMenu2);
 		JMenu menuHelp = new JMenu("Help");
-		JMenuItem helpItem = new JMenuItem("Help");
-		menuHelp.add(helpItem);
+		final JMenuItem legendaItem = new JMenuItem("Legenda");
+		menuHelp.add(legendaItem);
+		legendaItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if (legendaItem.getActionCommand() == "Legenda"){ 
+					Legenda lgd = new Legenda(new JFrame(), "Legenda");
+				}
+			}
+		});
 		menuBar.add(menuHelp);
 
 		return menuBar;
