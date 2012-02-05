@@ -1,3 +1,4 @@
+package vk.simulator;
 import java.util.Random;
 
 /**

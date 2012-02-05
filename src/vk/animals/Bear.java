@@ -1,6 +1,11 @@
+package vk.animals;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Random;
+
+import vk.simulator.Field;
+import vk.simulator.Location;
+import vk.simulator.Randomizer;
 
 /**
  * A simple model of a fox.
@@ -22,14 +27,16 @@ public class Bear extends Animal
 	// The maximum number of births.
 	private static final int MAX_LITTER_SIZE = 2;
 	// The food value of a single rabbit. In effect, this is the
-	// number of steps a fox can go before it has to eat again.
-	private static final int BEAR_FOOD_VALUE = 6;
+	// number of steps a rabbit can go before it has to eat again.
+	private static final int FOX_FOOD_SIZE = 3;
+	private static final int RABBIT_FOOD_SIZE = 3;
 	// A shared random number generator to control breeding.
 	private static final Random rand = Randomizer.getRandom();
 
 	// Individual characteristics (instance fields).
 	// The bear's food level, which is increased by eating rabbits.
 	private int foodLevel;
+	private int foodLevel1;
 
 	/**
 	 * Create a fox. A fox can be created as a new born (age zero
@@ -44,11 +51,13 @@ public class Bear extends Animal
 		super(field, location);
 		if(randomAge) {
 			this.age = rand.nextInt(MAX_AGE);
-			this.foodLevel = rand.nextInt(BEAR_FOOD_VALUE);
+			this.foodLevel = rand.nextInt(FOX_FOOD_SIZE);
+			this.foodLevel1 = rand.nextInt(RABBIT_FOOD_SIZE);
 		}
 		else {
 			this.age = 0;
-			this.foodLevel = BEAR_FOOD_VALUE;
+			this.foodLevel = FOX_FOOD_SIZE;
+			this.foodLevel1 = RABBIT_FOOD_SIZE;
 		}
 	}
 
@@ -102,7 +111,7 @@ public class Bear extends Animal
 				Fox fox = (Fox) animal;
 				if(fox.isAlive()) {
 					fox.setDead();
-					this.foodLevel = BEAR_FOOD_VALUE;
+					this.foodLevel = FOX_FOOD_SIZE;
 					// Remove the dead fox from the field.
 					return where;
 				}
@@ -111,7 +120,7 @@ public class Bear extends Animal
 				Rabbit rabbit = (Rabbit) animal;
 				if(rabbit.isAlive()) {
 					rabbit.setDead();
-					this.foodLevel = BEAR_FOOD_VALUE;
+					this.foodLevel1 = RABBIT_FOOD_SIZE;
 					// Remove the dead fox from the field.
 					return where;
 				}

@@ -1,6 +1,12 @@
+package vk.actor;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import vk.animals.Animal;
+import vk.simulator.Field;
+import vk.simulator.Location;
+import vk.simulator.Randomizer;
 
 public class Hunter implements Actor {
 // Whether the hunter is alive or not.

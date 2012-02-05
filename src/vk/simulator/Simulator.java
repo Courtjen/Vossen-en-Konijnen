@@ -1,8 +1,16 @@
+package vk.simulator;
 import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.awt.Color;
+
+import vk.SimulatorView;
+import vk.actor.Hunter;
+import vk.animals.Animal;
+import vk.animals.Bear;
+import vk.animals.Fox;
+import vk.animals.Rabbit;
 
 /**
  * A simple predator-prey simulator, based on a rectangular field
@@ -19,13 +27,13 @@ public class Simulator
     // The default depth of the grid.
     private static final int DEFAULT_DEPTH = 50;
     // The probability that a fox will be created in any given grid position.
-    private static final double FOX_CREATION_PROBABILITY = 0.02;
+    private static final double FOX_CREATION_PROBABILITY = 0.05;
     // The probability that a rabbit will be created in any given grid position.
     private static final double RABBIT_CREATION_PROBABILITY = 0.08;
     // The probability that a bear will be created in any given grid position.
     private static final double BEAR_CREATION_PROBABILITY = 0.05;
     // The probability that a bear will be created in any given grid position.
-    private static final double HUNTER_CREATION_PROBABILITY = 0.01; 
+    private static final double HUNTER_CREATION_PROBABILITY = 0.009; 
 
     // List of animals in the field.
     private static List<Animal> animals;
@@ -38,10 +46,10 @@ public class Simulator
     // A graphical view of the simulation.
     private static SimulatorView view;
     
-    private static boolean run;
+    public static boolean run;
     
-    private int width = 0;
-    private int depth = 0;
+    public static int width = 0;
+    public static int depth = 0;
     
     /**
      * Construct a simulation field with default size.
@@ -61,11 +69,11 @@ public class Simulator
         if(width1 <= 0 || depth1 <= 0) {
             System.out.println("The dimensions must be greater than zero.");
             System.out.println("Using default values.");
-            this.depth = DEFAULT_DEPTH;
-            this.width = DEFAULT_WIDTH;
+            Simulator.depth = DEFAULT_DEPTH;
+            Simulator.width = DEFAULT_WIDTH;
         } else {
-        	this.depth = depth1;
-            this.width = width1;
+        	Simulator.depth = depth1;
+            Simulator.width = width1;
         }
         
         Simulator.animals = new ArrayList<Animal>();
@@ -185,7 +193,7 @@ public class Simulator
                 }
                 else if(rand.nextDouble() <= BEAR_CREATION_PROBABILITY) {
                     Location location = new Location(row, col);
-                    Bear bear = new Bear(true, Simulator.field, location);
+                    Bear bear = new Bear(false, Simulator.field, location);
                     Simulator.animals.add(bear);
                 }
                 else if(rand.nextDouble() <= HUNTER_CREATION_PROBABILITY) {
@@ -204,13 +212,24 @@ public class Simulator
     public static void runApplication(){
     	Thread thread = new Thread(new Runnable(){
     		int steps = SimulatorView.simulateValue1;
-    		
-    		public void run(){
-    			run = true;
-    			while(run && step < steps){
-    				simulate(1);
-    			}
-    		}
+    		        		
+	    		public void run(){
+	    			
+	    			if(steps >= 1){
+		    			run = true;
+		    			while(run && step < steps){
+		    				simulate(1);
+		    				pause(50);
+		    			}
+	    			}
+	    			else {
+	    				run = true;
+		    			while(run){
+		    				simulate(1);
+		    				pause(50);
+		    			}
+	    			}
+	    		}
     	});
     	
     	thread.start();
@@ -218,6 +237,15 @@ public class Simulator
 	
 	static public void stop() {
 		run = false;
+		
+	}
+	
+	public static void pause(int i) {
+    	try {
+    		Thread.sleep(i) ;}
+    	catch (InterruptedException e) {
+    		e.printStackTrace();
+    	}
 	}
     
 }

@@ -1,3 +1,6 @@
+package vk;
+
+import vk.simulator.Simulator;
 
 public class Tester {
 
@@ -11,5 +14,6 @@ public class Tester {
 			width = Integer.parseInt(args[1]);
 		}
 		sim = new Simulator(heigth,width);
+		
 	}
 }

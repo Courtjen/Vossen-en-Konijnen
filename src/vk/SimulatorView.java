@@ -1,9 +1,15 @@
+package vk;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
 import javax.swing.*;
+
+import vk.simulator.Field;
+import vk.simulator.FieldStats;
+import vk.simulator.Simulator;
+import vk.view.Legenda;
 
 /**
 * A graphical view of the simulation grid.
@@ -29,7 +35,7 @@ public class SimulatorView extends JPanel implements ActionListener
 
 	private final String STEP_PREFIX = "Step: ";
 	private final String POPULATION_PREFIX = "Population: ";
-	private final String VERSION_PREFIX = "Version 0.0";
+	private final String VERSION_PREFIX = "1.0 Alpha";
 	private JLabel stepLabel, population, lblVersion;
 	private FieldView fieldView;
 
@@ -42,10 +48,9 @@ public class SimulatorView extends JPanel implements ActionListener
 	//A JFrame for the view
 	private int height, width;
 	private JFrame frame;
-	private JPanel panel;
+	private JPanel panel;	
 	
-	
-	protected static int simulateValue1 = 0;
+	public static int simulateValue1 = 0;
 	
 	/**
 	 * Create a view of the given width and height.
@@ -58,8 +63,8 @@ public class SimulatorView extends JPanel implements ActionListener
 	{
 		this.frame = new JFrame();
 		this.panel = new JPanel();
-		this.height=height1;
-		this.width=width1;
+		this.height = height1;
+		this.width = width1;
 
 		this.stats = new FieldStats();
 		this.colors = new LinkedHashMap<Class, Color>();
@@ -149,6 +154,20 @@ public class SimulatorView extends JPanel implements ActionListener
 				}
 			}
 		});
+		
+		
+		final JButton btnStart = new JButton("Start");
+		btnStart.addActionListener(
+				new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent e){
+						if (Simulator.run) {
+							System.out.println("De Simulatie loopt al!");
+						}
+						else Simulator.runApplication();
+					}
+				});
+		
 		final JButton btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -170,6 +189,7 @@ public class SimulatorView extends JPanel implements ActionListener
 		
 		JLabel emptyLabel = new JLabel();
 		JLabel emptyLabel1 = new JLabel();
+		JLabel emptyLabel2 = new JLabel();
 		
 		//Make frames
 		panel.add(btnStart1);
@@ -178,6 +198,9 @@ public class SimulatorView extends JPanel implements ActionListener
 		
 		panel.add(aantalStappen);
 		panel.add(simulateBtn);
+		panel.add(emptyLabel2);
+		
+		panel.add(btnStart);
 		panel.add(btnStop);
 		
 		panel.add(emptyLabel);

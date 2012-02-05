@@ -1,5 +1,11 @@
+package vk.animals;
 import java.util.List;
 import java.util.Random;
+
+import vk.actor.Actor;
+import vk.simulator.Field;
+import vk.simulator.Location;
+import vk.simulator.Randomizer;
 
 /**
  * A class representing shared characteristics of animals.
