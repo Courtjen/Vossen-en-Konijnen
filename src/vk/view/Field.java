@@ -1,8 +1,10 @@
-package vk.simulator;
+package vk.view;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import vk.simulator.Randomizer;
 
 /**
  * Represent a rectangular grid of field positions.

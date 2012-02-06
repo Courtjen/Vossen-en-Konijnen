@@ -1,5 +1,7 @@
-package vk.simulator;
+package vk.view;
 import java.util.HashMap;
+
+import vk.simulator.Counter;
 
 /**
  * This class collects and provides some statistical data on the state 

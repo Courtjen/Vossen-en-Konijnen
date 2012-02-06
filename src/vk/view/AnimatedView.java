@@ -7,9 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import vk.main.RunException;
+import vk.model.AbstractModel;
 import vk.model.Model;
-import vk.simulator.Field;
-import vk.simulator.FieldStats;
 import vk.simulator.Simulator;
 
 import java.util.LinkedHashMap;
@@ -48,8 +47,8 @@ public class AnimatedView extends AbstractView implements ActionListener, Simula
 	private FieldStats stats;
 
 	@SuppressWarnings("rawtypes")
-	public AnimatedView(Model newModel){
-		super(newModel);
+	public AnimatedView(AbstractModel model){
+		super(model);
 
 		this.stats = new FieldStats();
 		this.colors = new LinkedHashMap<Class, Color>();
@@ -57,7 +56,7 @@ public class AnimatedView extends AbstractView implements ActionListener, Simula
 		this.stepLabel = new JLabel(this.STEP_PREFIX, SwingConstants.CENTER);
 		this.population = new JLabel(this.POPULATION_PREFIX, SwingConstants.CENTER);
 
-		this.fieldView = new FieldView(Simulator.depth, Simulator.width);
+		//this.fieldView = new FieldView(Simulator.depth, Simulator.width);
 
 		setLayout(new BorderLayout());
 		add(this.stepLabel, BorderLayout.NORTH);
@@ -159,88 +158,4 @@ public class AnimatedView extends AbstractView implements ActionListener, Simula
 	 * This is rather advanced GUI stuff - you can ignore this
 	 * for your project if you like.
 	 */
-	class FieldView extends JPanel
-	{
-		private static final long serialVersionUID = 1L;
-
-		private final int GRID_VIEW_SCALING_FACTOR = 6;
-
-		private int gridWidth, gridHeight;
-		private int xScale, yScale;
-		Dimension size;
-		private Graphics g;
-		private Image fieldImage;
-
-		/**
-		 * Create a new FieldView component.
-		 */
-		public FieldView(int newHeight, int newWidth)
-		{
-			this.gridHeight = newHeight;
-			this.gridWidth = newWidth;
-			this.size = new Dimension(0, 0);
-		}
-
-		/**
-		 * Tell the GUI manager how big we would like to be.
-		 */
-		@Override
-		public Dimension getPreferredSize()
-		{
-			return new Dimension(this.gridWidth * this.GRID_VIEW_SCALING_FACTOR,
-					this.gridHeight * this.GRID_VIEW_SCALING_FACTOR);
-		}
-
-		/**
-		 * Prepare for a new round of painting. Since the component
-		 * may be resized, compute the scaling factor again.
-		 */
-		@SuppressWarnings("synthetic-access")
-		public void preparePaint()
-		{
-			if(! this.size.equals(getSize())) { // if the size has changed...
-				this.size = getSize();
-				this.fieldImage = AnimatedView.this.fieldView.createImage(this.size.width, this.size.height);
-				this.g = this.fieldImage.getGraphics();
-
-				this.xScale = this.size.width / this.gridWidth;
-				if(this.xScale < 1) {
-					this.xScale = this.GRID_VIEW_SCALING_FACTOR;
-				}
-				this.yScale = this.size.height / this.gridHeight;
-				if(this.yScale < 1) {
-					this.yScale = this.GRID_VIEW_SCALING_FACTOR;
-				}
-			}
-		}
-
-		/**
-		 * Paint on grid location on this field in a given color.
-		 */
-		public void drawMark(int x, int y, Color color)
-		{
-			this.g.setColor(color);
-			System.out.println(this.g.getColor());
-			this.g.fillRect(x * this.xScale, y * this.yScale, this.xScale-1, this.yScale-1);
-		}
-
-		/**
-		 * The field view component needs to be redisplayed. Copy the
-		 * internal image to screen.
-		 */
-		@Override
-		public void paintComponent(Graphics g1)
-		{
-			if(this.fieldImage != null) {
-				Dimension currentSize = getSize();
-				if(this.size.equals(currentSize)) {
-					g1.drawImage(this.fieldImage, 0, 0, null);
-				}
-				else {
-					// Rescale the previous image.
-					g1.drawImage(this.fieldImage, 0, 0, currentSize.width, currentSize.height, null);
-				}
-			}
-		}
-	}
 }

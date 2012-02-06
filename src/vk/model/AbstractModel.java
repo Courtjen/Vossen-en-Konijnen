@@ -6,7 +6,7 @@ import vk.view.AbstractView;
 
 public abstract class AbstractModel {
 
-	private List<AbstractView> views;
+	protected List<AbstractView> views;
 
 	public AbstractModel() {
 		this.views=new ArrayList<AbstractView>();

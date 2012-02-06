@@ -4,12 +4,14 @@ import javax.swing.*;
 
 import vk.model.Model;
 import vk.simulator.Simulator;
+import vk.view.Legenda;
+
 import java.awt.GridLayout;
 import java.awt.event.*;
 
 /**
  *
- * @author Hylke de Vries
+ * @author Pim Vellinga
  * @version 0.0
  */
 
@@ -19,7 +21,6 @@ public class Controller extends AbstractController implements ActionListener {
 	private JButton btnStart1;
 	private JButton btnStart100;
 	private JTextField aantalStappen;
-	private JButton btnSimuleer;
 	private JButton start;
 	private JButton stop;
 	private JButton btnReset;
@@ -27,7 +28,9 @@ public class Controller extends AbstractController implements ActionListener {
 	public Controller(Model newModel) {
 		super(newModel);
 
+		this.add(makeMenuBar());
 		this.add(makeWestBorder());
+		this.add(makeEastBorder());
 	}
 
 	/**
@@ -36,76 +39,30 @@ public class Controller extends AbstractController implements ActionListener {
 	 *
 	 * @return JPanel
 	 */
-	private static JPanel makeWestBorder() {
+	public JPanel makeWestBorder() {
 		JPanel panel2 = new JPanel();
 		JPanel westborder = new JPanel();
 
 		//Make buttons
 		JButton btnStart1 = new JButton("Step 1");
-		btnStart1.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (Simulator.run) Simulator.stop();
-						Simulator.simulateOneStep();
-					}
-				});
+		btnStart1.addActionListener(this);
+		
 		JButton btnStart100 = new JButton("Step 100");
-		btnStart100.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (Simulator.run) Simulator.stop();
-						Simulator.simulate(100);
-					}
-				});
+		btnStart100.addActionListener(this);
+		
 		final JTextField aantalStappen = new JTextField();
 		JButton btnSimuleer = new JButton("Simuleer");
-		btnSimuleer.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						try{
-							String aantalstappen = aantalStappen.getText();
-							int aantal = Integer.parseInt(aantalstappen);
-
-							if (aantal<=0)
-								System.out.println("Aantal dagen mag geen 0 zijn!");
-							else{
-								if (Simulator.run) Simulator.stop();
-								Simulator.simulate(aantal);
-							}
-						}
-						catch (Exception exc){
-							System.out.println("Voer een positief getal in!");
-						}
-					}
-				});
+		btnSimuleer.addActionListener(this);
+		
 		final JButton btnStart = new JButton("Start");
-		btnStart.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e){
-						if (!Simulator.run) Simulator.runApplication();
-					}
-				});
+		btnStart.addActionListener(this);
+		
 		final JButton btnStop = new JButton("Stop");
-		btnStop.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e){
-						if (Simulator.run) Simulator.stop();
-					}
-				});
+		btnStop.addActionListener(this);
+		
 		final JButton btnReset = new JButton("Reset");
-		btnReset.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e){
-						if (Simulator.run) Simulator.stop();
-						Simulator.reset();
-					}
-				});
+		btnReset.addActionListener(this);
+		
 
 		//An empty label, to create an empty line in the buttonmenu
 		JLabel emptyLabel1 = new JLabel();
@@ -135,6 +92,54 @@ public class Controller extends AbstractController implements ActionListener {
 
 		return westborder;
 	}
+	
+	/**
+	 * Creates a JPanel with a BoxLayout to facilitate the Graphics
+	 * @return
+	 */
+	
+	public JPanel makeEastBorder(){
+		JPanel panel = new JPanel();
+		JPanel eastborder =  new JPanel();
+		
+		final JButton btnTest = new JButton("Test");
+		btnTest.addActionListener(this);
+		
+		panel.add(btnTest);
+		panel.setLayout(new GridLayout(0,3));
+
+		eastborder.add(panel);
+		eastborder.setVisible(true);
+		
+		return eastborder;
+	}
+	
+	/**
+	 * Makes the menubar
+	 *
+	 * @return JMenuBar
+	 */
+	public JMenuBar makeMenuBar(){
+		JMenuBar menuBar = new JMenuBar();
+
+		JMenu menuMenu1 = new JMenu("Bestand");
+		final JMenuItem quitItem = new JMenuItem("Afsluiten");
+		quitItem.addActionListener(this);
+		menuMenu1.add(quitItem);
+		menuBar.add(menuMenu1);
+		
+		JMenu menuHelp = new JMenu("Help");
+		final JMenuItem legendaItem = new JMenuItem("Legenda");
+		menuHelp.add(legendaItem);
+		legendaItem.addActionListener(this);
+		menuBar.add(menuHelp);
+
+		return menuBar;
+	}
+	
+	/**
+	 * Handles the events for every action performed
+	 */
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -146,27 +151,8 @@ public class Controller extends AbstractController implements ActionListener {
 			model.simulate(100);
 		}
 
-		if (e.getSource()==this.btnSimuleer) {
-			this.model.setSteps(this.model.getSteps()+1);
-
-			try{
-				String aantalstappen = this.aantalStappen.getText();
-				int aantal = Integer.parseInt(aantalstappen);
-
-				if (aantal<=0)
-					System.out.println("Aantal dagen mag geen 0 zijn!");
-				else{
-					if (this.model.getRun()) this.model.stop();
-					model.simulate(aantal);
-				}
-			}
-			catch (Exception exc){
-				System.out.println("Voer een positief getal in!");
-			}
-		}
-
 		if (e.getSource()==this.start) {
-			this.model.start();
+			model.runApplication();
 		}
 
 		if (e.getSource()==this.stop) {
@@ -175,6 +161,44 @@ public class Controller extends AbstractController implements ActionListener {
 
 		if (e.getSource()==this.btnReset) {
 			model.reset();
+		}
+		if (e.getActionCommand() == "Legenda"){
+			Legenda lgd = new Legenda(new JFrame(), "Legenda");
+		}
+		if(e.getActionCommand() == "Afsluiten"){
+			System.exit(0);
+		}
+		if(e.getActionCommand() == "Test"){
+			System.out.println("Test gelukt!");
+		}
+		
+		if(e.getActionCommand() == "Simuleer"){
+			try{
+				String aantalstappen = this.aantalStappen.getText();
+				int aantal = Integer.parseInt(aantalstappen);
+
+				if (aantal<=0)
+					System.out.println("Aantal dagen mag geen 0 zijn!");
+				else{
+					if (model.run == true) model.stop();
+					model.simulate(aantal);
+				}
+			}
+			catch (Exception exc){
+				System.out.println("Voer een positief getal in!");
+			}
+			if (!Simulator.run) Simulator.runApplication();
+		}
+		if (e.getActionCommand() == "Start"){
+			if (!Simulator.run) Simulator.runApplication();
+		}
+		if(e.getActionCommand() == "Stop"){
+			if (Simulator.run) Simulator.stop();
+		}
+		
+		if(e.getActionCommand() == "Reset"){
+			if (Simulator.run) Simulator.stop();
+			Simulator.reset();
 		}
 	}
 }

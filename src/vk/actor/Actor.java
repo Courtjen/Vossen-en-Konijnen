@@ -1,7 +1,9 @@
 package vk.actor;
 
-import vk.simulator.Field;
-import vk.simulator.Location;
+import java.util.List;
+
+import vk.view.Field;
+import vk.view.Location;
 
 public interface Actor {
 
@@ -41,4 +43,6 @@ public interface Actor {
 * @param newLocation The actors new location.
 */
     public void setLocation(Location newLocation);
+
+	public void act(List<Actor> newActors);
 }

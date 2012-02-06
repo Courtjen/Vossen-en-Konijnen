@@ -11,6 +11,8 @@ import vk.animals.Animal;
 import vk.animals.Bear;
 import vk.animals.Fox;
 import vk.animals.Rabbit;
+import vk.view.Field;
+import vk.view.Location;
 
 /**
  * A simple predator-prey simulator, based on a rectangular field

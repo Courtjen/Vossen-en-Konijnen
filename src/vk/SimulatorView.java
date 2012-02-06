@@ -1,4 +1,5 @@
 package vk;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,9 +7,9 @@ import java.util.*;
 
 import javax.swing.*;
 
-import vk.simulator.Field;
-import vk.simulator.FieldStats;
 import vk.simulator.Simulator;
+import vk.view.Field;
+import vk.view.FieldStats;
 import vk.view.Legenda;
 
 /**
@@ -48,7 +49,7 @@ public class SimulatorView extends JPanel implements ActionListener
 	//A JFrame for the view
 	private int height, width;
 	private JFrame frame;
-	private JPanel panel;	
+	private JPanel panel;
 	
 	public static int simulateValue1 = 0;
 	
@@ -68,7 +69,9 @@ public class SimulatorView extends JPanel implements ActionListener
 
 		this.stats = new FieldStats();
 		this.colors = new LinkedHashMap<Class, Color>();
-
+		
+		// Frame settings
+		
 		this.frame.setTitle("Fox and Rabbit Simulation");
 		this.stepLabel = new JLabel(this.STEP_PREFIX, JLabel.CENTER);
 		this.population = new JLabel(this.POPULATION_PREFIX, JLabel.CENTER);
@@ -85,6 +88,7 @@ public class SimulatorView extends JPanel implements ActionListener
 		this.frame.setJMenuBar(makeMenuBar());
 		this.frame.add(this.panel, BorderLayout.CENTER);
 		this.frame.add(this.makeWestBorder(), BorderLayout.WEST);
+		this.frame.add(this.makeEastBorder(), BorderLayout.EAST);
 		this.frame.add(this.lblVersion, BorderLayout.SOUTH);
 		this.frame.pack();
 		this.frame.setVisible(true);
@@ -108,148 +112,7 @@ public class SimulatorView extends JPanel implements ActionListener
 
 		return place;
 	}
-
-	/**
-	 * Makes a JPanel with a BoxLayout.
-	 * Contains buttons
-	 *
-	 * @return JPanel
-	 */
-	private static JPanel makeWestBorder() {
-		JPanel panel = new JPanel();
-		JPanel westborder = new JPanel();
-
-		//Make buttons
-		JButton btnStart1 = new JButton("Step 1");
-		btnStart1.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Simulator.simulateOneStep();
-					}
-				}
-				);
-		JButton btnStart100 = new JButton("Step 100");
-		btnStart100.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Simulator.simulate(100);
-					}
-				}
-				);
-		final JTextField aantalStappen = new JTextField();
-		JButton simulateBtn = new JButton("Simuleer");
-		
-		simulateBtn.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				String simulateValue = aantalStappen.getText();
-				
-				if(simulateValue.length() == 0 || Integer.parseInt(simulateValue) <= 10 ){
-					System.out.println("Foutieve invoer");
-				}
-				else {
-					simulateValue1 = Integer.parseInt(simulateValue);
-					Simulator.runApplication();
-				}
-			}
-		});
-		
-		
-		final JButton btnStart = new JButton("Start");
-		btnStart.addActionListener(
-				new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e){
-						if (Simulator.run) {
-							System.out.println("De Simulatie loopt al!");
-						}
-						else Simulator.runApplication();
-					}
-				});
-		
-		final JButton btnStop = new JButton("Stop");
-		btnStop.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				
-				if (btnStop.getActionCommand() == "Stop"){
-					Simulator.stop();
-				}
-			}
-		});
-		
-		final JButton btnReset = new JButton("Reset");
-		btnReset.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				if(btnReset.getActionCommand() == "Reset"){
-					Simulator.reset();
-				}
-			}
-		});
-		
-		JLabel emptyLabel = new JLabel();
-		JLabel emptyLabel1 = new JLabel();
-		JLabel emptyLabel2 = new JLabel();
-		
-		//Make frames
-		panel.add(btnStart1);
-		panel.add(btnStart100);
-		panel.add(emptyLabel1);
-		
-		panel.add(aantalStappen);
-		panel.add(simulateBtn);
-		panel.add(emptyLabel2);
-		
-		panel.add(btnStart);
-		panel.add(btnStop);
-		
-		panel.add(emptyLabel);
-		panel.add(btnReset);
-		
-		panel.setLayout(new GridLayout(0,1));
-
-		westborder.add(panel);
-		westborder.setVisible(true);
-
-		return westborder;
-	}
 	
-	
-
-	/**
-	 * Makes the menubar
-	 *
-	 * @return JMenuBar
-	 */
-	private JMenuBar makeMenuBar(){
-		JMenuBar menuBar = new JMenuBar();
-
-		JMenu menuMenu1 = new JMenu("Bestand");
-		final JMenuItem quitItem = new JMenuItem("Afsluiten");
-		quitItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				if (quitItem.getActionCommand() == "Afsluiten"){
-					System.exit(1);
-				}
-			}
-		});
-		
-		menuMenu1.add(quitItem);
-		menuBar.add(menuMenu1);
-		JMenu menuHelp = new JMenu("Help");
-		final JMenuItem legendaItem = new JMenuItem("Legenda");
-		menuHelp.add(legendaItem);
-		legendaItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				if (legendaItem.getActionCommand() == "Legenda"){ 
-					Legenda lgd = new Legenda(new JFrame(), "Legenda");
-				}
-			}
-		});
-		menuBar.add(menuHelp);
-
-		return menuBar;
-	}
 
 	/**
 	 * Define a color to be used for a given class of animal.
@@ -412,14 +275,8 @@ public class SimulatorView extends JPanel implements ActionListener
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		Object command = e.getActionCommand();
-
-		if (command!=null){
-			System.out.println("Geen actie voor command bekend!\n Command = \""+command+"\";\n "+e+"\n");
-		}
-		else{
-			System.out.println("Command is 'null'!\n "+e);
-		}
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

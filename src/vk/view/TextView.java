@@ -8,7 +8,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
-import vk.simulator.Field;
 
 public class TextView extends JPanel implements SimulatorView{
 

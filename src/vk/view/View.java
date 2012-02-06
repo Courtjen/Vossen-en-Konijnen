@@ -1,7 +1,5 @@
 package vk.view;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import vk.model.Model;
 
 /**
@@ -11,7 +9,7 @@ import vk.model.Model;
  */
 
 @SuppressWarnings("serial")
-public class View extends AbstractView implements ActionListener {
+public class View extends AbstractView {
 
 	AbstractView animatedView;
 
@@ -21,18 +19,6 @@ public class View extends AbstractView implements ActionListener {
 
 		this.add(this.animatedView);
 		this.setVisible(true);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e){
-		Object command = e.getActionCommand();
-
-		if (command=="Afsluiten"){
-			System.exit(0);
-		}
-		else{
-			System.out.println("Geen actie voor command bekend!\n Command = \""+command+"\";\n "+e+"\n");
-		}
 	}
 
 	public void setModel(Model newModel) {

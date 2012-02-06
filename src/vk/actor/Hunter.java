@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Random;
 
 import vk.animals.Animal;
-import vk.simulator.Field;
-import vk.simulator.Location;
 import vk.simulator.Randomizer;
+import vk.view.Field;
+import vk.view.Location;
 
 public class Hunter implements Actor {
 // Whether the hunter is alive or not.

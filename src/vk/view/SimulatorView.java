@@ -3,7 +3,6 @@ package vk.view;
 import java.awt.Color;
 
 import vk.main.RunException;
-import vk.simulator.Field;
 
 public interface SimulatorView {
 	@SuppressWarnings("rawtypes")
