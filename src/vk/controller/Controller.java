@@ -2,6 +2,7 @@ package vk.controller;
 
 import javax.swing.*;
 
+import vk.main.Main;
 import vk.model.Model;
 import vk.simulator.Simulator;
 import vk.view.Legenda;
@@ -18,13 +19,9 @@ import java.awt.event.*;
 @SuppressWarnings("serial")
 public class Controller extends AbstractController implements ActionListener {
 
-	private JButton btnStart1;
-	private JButton btnStart100;
 	private JTextField aantalStappen;
-	private JButton start;
-	private JButton stop;
-	private JButton btnReset;
-
+	private String steps;
+	
 	public Controller(Model newModel) {
 		super(newModel);
 
@@ -50,7 +47,9 @@ public class Controller extends AbstractController implements ActionListener {
 		JButton btnStart100 = new JButton("Step 100");
 		btnStart100.addActionListener(this);
 		
-		final JTextField aantalStappen = new JTextField();
+		this.aantalStappen = new JTextField();
+		steps = aantalStappen.getText();
+		
 		JButton btnSimuleer = new JButton("Simuleer");
 		btnSimuleer.addActionListener(this);
 		
@@ -143,39 +142,19 @@ public class Controller extends AbstractController implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource()==this.btnStart1) {
-			model.simulateOneStep();
-		}
-
-		if (e.getSource()==this.btnStart100) {
-			model.simulate(100);
-		}
-
-		if (e.getSource()==this.start) {
-			model.runApplication();
-		}
-
-		if (e.getSource()==this.stop) {
-			this.model.stop();
-		}
-
-		if (e.getSource()==this.btnReset) {
-			model.reset();
-		}
-		if (e.getActionCommand() == "Legenda"){
-			Legenda lgd = new Legenda(new JFrame(), "Legenda");
-		}
-		if(e.getActionCommand() == "Afsluiten"){
-			System.exit(0);
-		}
-		if(e.getActionCommand() == "Test"){
-			System.out.println("Test gelukt!");
-		}
+		//--------- Knoppen
 		
+		if(e.getActionCommand() == "Step 1"){
+			this.model.simulateOneStep();
+		}
+		if(e.getActionCommand() == "Step 100"){
+			this.model.simulate(100);
+		}
 		if(e.getActionCommand() == "Simuleer"){
 			try{
-				String aantalstappen = this.aantalStappen.getText();
-				int aantal = Integer.parseInt(aantalstappen);
+				steps = aantalStappen.getText();
+				System.out.println(steps);
+				int aantal = Integer.parseInt(steps);
 
 				if (aantal<=0)
 					System.out.println("Aantal dagen mag geen 0 zijn!");
@@ -185,20 +164,33 @@ public class Controller extends AbstractController implements ActionListener {
 				}
 			}
 			catch (Exception exc){
+				exc.printStackTrace();
 				System.out.println("Voer een positief getal in!");
 			}
 			if (!Simulator.run) Simulator.runApplication();
 		}
 		if (e.getActionCommand() == "Start"){
-			if (!Simulator.run) Simulator.runApplication();
+			if (! model.run) model.runApplication();
 		}
-		if(e.getActionCommand() == "Stop"){
-			if (Simulator.run) Simulator.stop();
+		if (e.getActionCommand() == "Stop"){
+			if (model.run) model.stop();
+		}
+		if (e.getActionCommand() == "Reset"){
+			if (model.run) model.stop();
+			model.reset();
 		}
 		
-		if(e.getActionCommand() == "Reset"){
-			if (Simulator.run) Simulator.stop();
-			Simulator.reset();
+		if (e.getActionCommand() == "Test"){
+			System.out.print("Test gelukt");
+		}
+		
+		//--- Menu items
+		
+		if (e.getActionCommand() == "Legenda"){
+			Legenda lgd = new Legenda(new JFrame(), "Legenda");
+		}
+		if(e.getActionCommand() == "Afsluiten"){
+			System.exit(0);
 		}
 	}
 }
