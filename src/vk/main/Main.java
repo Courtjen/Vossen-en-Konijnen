@@ -21,12 +21,14 @@ public class Main extends JFrame {
 
 	private Controller controller;
 	
+	public JLabel population;
+	public JLabel lblSteps;
+	public JLabel lblVersion;
 	
-    public static JLabel population;
-    
-    //private final String STEP_PREFIX = "Step: ";
-    private final String POPULATION_PREFIX = "Population: ";
-
+    public final String STEP_PREFIX = "Step: ";
+    public final String POPULATION_PREFIX = "Population: ";
+    public final String VERSION_PREFIX = "Version 0.0";
+	
 	public Main(){
 		model = new Model(this);
 		
@@ -37,8 +39,10 @@ public class Main extends JFrame {
 		setTitle("Vossen en Konijnen");
 
 		JPanel panel = new JPanel();
+		
+	    population = new JLabel(this.POPULATION_PREFIX, SwingConstants.CENTER);
+	    lblSteps = new JLabel(this.STEP_PREFIX, SwingConstants.CENTER);
 
-		population = new JLabel(POPULATION_PREFIX, JLabel.CENTER);
 		
 		Container content = getContentPane();
 
@@ -50,16 +54,16 @@ public class Main extends JFrame {
 		panel.add(controller.makeEastBorder(), BorderLayout.EAST);
 		panel.add(controller.makeWestBorder(), BorderLayout.WEST);
 
+		panel.add(lblSteps, BorderLayout.NORTH);
 		panel.add(view, BorderLayout.CENTER);
 		panel.add(population, BorderLayout.SOUTH);
 		content.add(panel,BorderLayout.SOUTH);
-		setResizable(true);
+		setResizable(false);
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		model.reset();
-
-
+		
 	}
 	
 }
