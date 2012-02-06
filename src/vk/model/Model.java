@@ -1,14 +1,15 @@
 package vk.model;
 
-import vk.SimulatorView;
 import vk.actor.*;
 
 import vk.animals.*;
+import vk.controller.Controller;
 import vk.main.Main;
 import vk.simulator.Randomizer;
 import vk.view.Field;
 import vk.view.FieldStats;
 import vk.view.Location;
+import vk.view.SimulatorView;
 
 
 import java.awt.Color;
@@ -286,7 +287,7 @@ public class Model extends AbstractModel implements Runnable {
     
     public void runApplication(){
     	Thread thread = new Thread(new Runnable(){
-    		int steps = SimulatorView.simulateValue1;
+    		int steps = Controller.toRun;
     		        		
 	    		public void run(){
 	    			

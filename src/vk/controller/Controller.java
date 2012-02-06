@@ -22,7 +22,7 @@ public class Controller extends AbstractController implements ActionListener {
 	private JTextField aantalStappen;
 	private String steps;
 	
-	public static int Q = 0;
+	public static int toRun = 0;
 	
 	public Controller(Model newModel) {
 		super(newModel);
@@ -158,7 +158,7 @@ public class Controller extends AbstractController implements ActionListener {
 				System.out.println(steps);
 				int aantal = Integer.parseInt(steps);
 				
-				Q = aantal;
+				toRun = aantal;
 
 				if (aantal<=0)
 					System.out.println("Aantal dagen mag geen 0 zijn!");
