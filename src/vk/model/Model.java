@@ -227,9 +227,8 @@ public class Model extends AbstractModel implements Runnable {
             views.get(0).setVisible(true);
         }
             
-        
+        main.lblSteps.setText(main.STEP_PREFIX + step);
        
-        //main.setTitle("Vossen en Konijnen");
         stats.reset();
         
         views.get(0).preparePaint();
@@ -248,7 +247,7 @@ public class Model extends AbstractModel implements Runnable {
         }
         stats.countFinished();
 
-        //main.population.setText(this.POPULATION_PREFIX + this.stats.getPopulationDetails(field));
+        main.population.setText(main.POPULATION_PREFIX + this.stats.getPopulationDetails(field));
         
         notifyViews();
     }
