@@ -2,6 +2,7 @@ package vk.animals;
 import java.util.List;
 import java.util.Random;
 
+import vk.actor.Actor;
 import vk.simulator.Randomizer;
 import vk.view.Field;
 import vk.view.Location;
@@ -55,9 +56,9 @@ public class Rabbit extends Animal
 * @param newRabbits A list to add newly born rabbits to.
 */
     @Override
-public void act(List<Animal> newRabbits)
+public void act(List<Actor> newRabbits)
     {
-        incrementAge();
+        super.incrementAge();
         if(isAlive()) {
             giveBirth(newRabbits);
             // Try to move into a free location.
@@ -77,7 +78,7 @@ public void act(List<Animal> newRabbits)
 * New births will be made into free adjacent locations.
 * @param newRabbits A list to add newly born rabbits to.
 */
-    private void giveBirth(List<Animal> newRabbits)
+    private void giveBirth(List<Actor> newRabbits)
     {
         // New rabbits are born into adjacent locations.
         // Get a list of adjacent free locations.

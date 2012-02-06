@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Random;
 
+import vk.actor.Actor;
 import vk.simulator.Randomizer;
 import vk.view.Field;
 import vk.view.Location;
@@ -69,9 +70,9 @@ public class Bear extends Animal
 	 * @param newFoxes A list to add newly born foxes to.
 	 */
 	@Override
-	public void act(List<Animal> newBears)
+	public void act(List<Actor> newBears)
 	{
-		incrementAge();
+		super.incrementAge();
 		incrementHunger();
 		if(isAlive()) {
 			giveBirth(newBears);
@@ -134,7 +135,7 @@ public class Bear extends Animal
 	 * New births will be made into free adjacent locations.
 	 * @param newFoxes A list to add newly born foxes to.
 	 */
-	private void giveBirth(List<Animal> newBears)
+	private void giveBirth(List<Actor> newBears)
 	{
 		// New bears are born into adjacent locations.
 		// Get a list of adjacent free locations.
