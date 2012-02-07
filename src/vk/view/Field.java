@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import vk.actor.Actor;
 import vk.simulator.Randomizer;
 
 /**
@@ -204,6 +205,18 @@ public class Field
     public int getWidth()
     {
         return width;
+    }
+    
+    /**
+     * Returns the actor at the given location
+     * @param location
+     * @return actor
+     */
+
+    public Actor getActor(Location location)
+    {
+        Actor actor = (Actor) getObjectAt(location.getRow(), location.getCol());
+        return actor;
     }
 }
 

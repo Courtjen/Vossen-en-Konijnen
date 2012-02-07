@@ -2,23 +2,21 @@ package vk.model;
 
 import vk.actor.*;
 
-import vk.animals.*;
 import vk.controller.Controller;
+import vk.exception.RunException;
 import vk.main.Main;
 import vk.simulator.Randomizer;
 import vk.view.Field;
 import vk.view.FieldStats;
 import vk.view.Location;
-import vk.view.SimulatorView;
 
 
 import java.awt.Color;
 import java.util.*;
 
-import java.awt.Dimension;
-
-
 /**
+ * The main Model class. 
+ * This class provides all the logic behind the application
  *
  * @author Pim Vellinga
  * @version 1.0
@@ -37,7 +35,7 @@ public class Model extends AbstractModel implements Runnable {
     // The probability that a bear will be created in any given grid position.
     private static final double BEAR_CREATION_PROBABILITY = 0.05;
     // The probability that a bear will be created in any given grid position.
-    private static final double HUNTER_CREATION_PROBABILITY = 0.009; 
+    private static final double HUNTER_CREATION_PROBABILITY = 0.019; 
     
     private static final Color UNKNOWN_COLOR = Color.gray;
     private static final Color EMPTY_COLOR = Color.white;
@@ -45,18 +43,13 @@ public class Model extends AbstractModel implements Runnable {
     
     // List of all the actors
     private List<Actor> actors;
-    // List of animals in the field.
-    //private static List<Animal> animals;
-    // List of animals in the field.
-    //private static List<Hunter> hunters;
     // The current state of the field.
     private Field field;
     // The current step of the simulation.
     private int step;
-    // A graphical view of the simulation.
-    
+    // A boolean to see wether the application is running or not
     public boolean run;
-    
+    // a Hash map to link all the colours to the Actors
     private LinkedHashMap<Class<Actor>, Color> colors;
         
     private FieldStats stats;
@@ -87,13 +80,8 @@ public class Model extends AbstractModel implements Runnable {
         }
         
         actors = new ArrayList<Actor>();
-        //animals = new ArrayList<Animal>();
-        //hunters = new ArrayList<Hunter>();
         field = new Field(depth, width);
-        
-        System.out.println("Depth: " + depth);
-        System.out.println("Width: " + width);
-        
+              
         stats = new FieldStats();
         
         colors = new LinkedHashMap<Class<Actor>, Color>();
@@ -103,10 +91,7 @@ public class Model extends AbstractModel implements Runnable {
         setColor(Fox.class, Color.blue);
         setColor(Bear.class, Color.red);
         setColor(Hunter.class, Color.black);
-        
-        // Setup a valid starting point.
-        //reset();
-    }
+      }
     
     /**
      * Run the simulation from its current state for a reasonably long period,
@@ -194,7 +179,7 @@ public class Model extends AbstractModel implements Runnable {
                 }
                 else if(rand.nextDouble() <= BEAR_CREATION_PROBABILITY) {
                     Location location = new Location(row, col);
-                    Bear bear = new Bear(false, field, location);
+                    Bear bear = new Bear(true, field, location);
                     actors.add(bear);
                 }
                 else if(rand.nextDouble() <= HUNTER_CREATION_PROBABILITY) {
@@ -268,7 +253,7 @@ public class Model extends AbstractModel implements Runnable {
     /**
      * @return The color to be used for a given class of animal.
      */
-    private Color getColor(Class animalClass)
+    private Color getColor(Class<?> animalClass)
     {
     	Color col = colors.get(animalClass);
     	if(col == null) {
@@ -285,7 +270,7 @@ public class Model extends AbstractModel implements Runnable {
      * Methode om de applicatie te laten starten
      */
     
-    public void runApplication(){
+    public void runApplication() throws RunException {
     	Thread thread = new Thread(new Runnable(){
     		int steps = Controller.toRun;
     		        		
@@ -306,6 +291,30 @@ public class Model extends AbstractModel implements Runnable {
 		    			}
 	    			}
 	    		}
+    	});
+    	
+    	thread.start();
+    }
+    
+    
+    /**
+     * Method to run the application with a fixed number of steps.
+     * Adds a thread to animate the simulation.
+     * @param i
+     */
+    public void runApplication(final int i){
+    	Thread thread = new Thread(new Runnable(){
+    		int steps = i;
+    		public void run(){
+				if(steps >= 1){
+					run = true;
+					
+					while(run && step < steps){
+						simulate(steps);
+						pause(50);
+					}
+				}
+    		}
     	});
     	
     	thread.start();
@@ -333,6 +342,11 @@ public class Model extends AbstractModel implements Runnable {
     	}
 	}
   
+	/**
+	 * Set a color for a animalClass
+	 * @param animalClass
+	 * @param color
+	 */
 	
 	public void setColor(Class animalClass, Color color)
     {
@@ -354,83 +368,3 @@ public class Model extends AbstractModel implements Runnable {
 	}
     
 }
-
-/*
-public class Model extends AbstractModel implements Runnable {
-
-	private int steps;
-	private boolean run;
-
-
-	public Model() {
-		this.steps = 0;
-		this.run = false;
-	}
-
-	//----------Getters
-
-
-	public int getSteps() {
-		return this.steps;
-	}
-
-
-	public boolean getRun() {
-		return this.run;
-	}
-
-	//----------Setters
-
-	public void setSteps(int newSteps){
-		this.steps=newSteps;
-	}
-
-	//----------Voids
-
-
-	public void incrementSteps() throws RunException {
-		setSteps(getSteps()+1);
-		notifyViews();
-	}
-
-
-	public void start() {
-		new Thread(this).start();
-	}
-
-
-	public void stop() {
-		this.run=false;
-	}
-
-	@Override
-	public void run() {
-		this.run=true;
-		while(this.run) {
-			simulate(1);
-			notifyViews();
-			try {
-				Thread.sleep(100);
-			} catch (Exception e) {
-				System.out.println("Thread error (can't sleap)!");
-			}
-		}
-	}
-
-	public void simulateOneStep() {
-		Simulator.simulateOneStep();
-		notifyViews();
-	}
-
-
-	public void simulate(int i) {
-		Simulator.simulate(i);
-		notifyViews();
-	}
-	public void reset() {
-		Simulator.reset();
-		notifyViews();
-	}
-}
-
-*/

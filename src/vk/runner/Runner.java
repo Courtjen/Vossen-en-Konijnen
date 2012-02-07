@@ -1,4 +1,4 @@
-package vk.Runner;
+package vk.runner;
 
 import vk.main.Main;
 

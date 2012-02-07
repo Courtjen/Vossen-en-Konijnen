@@ -1,15 +1,13 @@
 package vk.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 
-public class TextView extends JPanel implements SimulatorView{
+public class TextView extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -35,25 +33,6 @@ public class TextView extends JPanel implements SimulatorView{
 	 */
 	public JTextArea getOutput() {
 		return this.output;
-
-	}
-
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void setColor(Class cl, Color color) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean isViable(Field field) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void showStatus(int step, Field field) {
-		// TODO Auto-generated method stub
 
 	}
 }

@@ -3,6 +3,7 @@ package vk.view;
 import vk.model.Model;
 
 /**
+ * A class to provide basic commands regarding Views.
  *
  * @author Pim Vellinga
  * @version 1.0
@@ -11,13 +12,9 @@ import vk.model.Model;
 @SuppressWarnings("serial")
 public class View extends AbstractView {
 
-	AbstractView animatedView;
-
 	public View(Model newModel) {
 		super(newModel);
-		this.animatedView = new AnimatedView(this.model);
 
-		this.add(this.animatedView);
 		this.setVisible(true);
 	}
 

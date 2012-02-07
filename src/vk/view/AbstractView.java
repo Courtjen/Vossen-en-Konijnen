@@ -7,7 +7,6 @@ import java.awt.Image;
 import javax.swing.*;
 
 import vk.model.AbstractModel;
-import vk.model.Model;
 
 public abstract class AbstractView extends JPanel {
 

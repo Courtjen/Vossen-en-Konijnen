@@ -13,16 +13,16 @@ public abstract class Human implements Actor {
 	// Whether the animal is alive or not.
 	protected boolean alive;
 	// The animal's field.
-	private Field field;
+	protected Field field;
 	// The animal's position in the field.
 	private Location location;
 
 	public Human(Field fieldInput, Location locationInput)
 	{
-		this.alive = true;
+		alive = true;
 		this.field = fieldInput;
 		setLocation(locationInput);
-		this.age=0;
+		age = 0;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public abstract class Human implements Actor {
 	@Override
 	public boolean isAlive()
 	{
-		return this.alive;
+		return alive;
 	}
 
 
@@ -52,11 +52,11 @@ public abstract class Human implements Actor {
 	@Override
 	public void setDead()
 	{
-		this.alive = false;
-		if(this.location != null) {
+		alive = false;
+		if(location != null) {
 			this.field.clear(this.location);
-			this.location = null;
-			this.field = null;
+			location = null;
+			field = null;
 		}
 	}
 

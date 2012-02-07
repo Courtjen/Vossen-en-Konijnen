@@ -10,11 +10,16 @@ import vk.controller.*;
 
 import javax.swing.*;
 
+
+/**
+ * Main class that initializes the application
+ * 
+ * @author Pim
+ * @version 1.0
+ * 
+ */
 public class Main extends JFrame {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private FieldView view;
 	private Model model;
@@ -29,6 +34,11 @@ public class Main extends JFrame {
     public final String POPULATION_PREFIX = "Population: ";
     public final String VERSION_PREFIX = "Version 0.0";
 	
+    
+    /**
+     * Makes a new Main object that initializes all the settings for the simulation.
+     * 
+     */
 	public Main(){
 		model = new Model(this);
 		
@@ -58,12 +68,12 @@ public class Main extends JFrame {
 		panel.add(view, BorderLayout.CENTER);
 		panel.add(population, BorderLayout.SOUTH);
 		content.add(panel,BorderLayout.SOUTH);
+		
 		setResizable(false);
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		model.reset();
-		
+		model.reset();		
 	}
 	
 }

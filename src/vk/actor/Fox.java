@@ -1,9 +1,8 @@
-package vk.animals;
+package vk.actor;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Random;
 
-import vk.actor.Actor;
 import vk.simulator.Randomizer;
 import vk.view.Field;
 import vk.view.Location;
@@ -12,32 +11,31 @@ import vk.view.Location;
  * A simple model of a fox.
  * Foxes age, move, eat rabbits, and die.
  *
- * @author David J. Barnes and Michael Kolling
- * @version 2008.03.30
+ * @author Pim Vellinga
+ * @version 1.0
  */
-public class Bear extends Animal
+
+public class Fox extends Animal
 {
 	// Characteristics shared by all foxes (static fields).
 
-	// The age at which a bear can start to breed.
-	private static final int BREEDING_AGE = 5;
-	// The age to which a bear can live.
-	private static final int MAX_AGE = 17;
-	// The likelihood of a bear breeding.
-	private static final double BREEDING_PROBABILITY = 0.06;
+	// The age at which a fox can start to breed.
+	private static final int BREEDING_AGE = 10;
+	// The age to which a fox can live.
+	private static final int MAX_AGE = 20;
+	// The likelihood of a fox breeding.
+	private static final double BREEDING_PROBABILITY = 0.08;
 	// The maximum number of births.
-	private static final int MAX_LITTER_SIZE = 2;
+	private static final int MAX_LITTER_SIZE = 3;
 	// The food value of a single rabbit. In effect, this is the
-	// number of steps a rabbit can go before it has to eat again.
-	private static final int FOX_FOOD_SIZE = 3;
-	private static final int RABBIT_FOOD_SIZE = 3;
+	// number of steps a fox can go before it has to eat again.
+	private static final int RABBIT_FOOD_VALUE = 5;
 	// A shared random number generator to control breeding.
 	private static final Random rand = Randomizer.getRandom();
 
 	// Individual characteristics (instance fields).
-	// The bear's food level, which is increased by eating rabbits.
+	// The fox's food level, which is increased by eating rabbits.
 	private int foodLevel;
-	private int foodLevel1;
 
 	/**
 	 * Create a fox. A fox can be created as a new born (age zero
@@ -47,18 +45,16 @@ public class Bear extends Animal
 	 * @param field The field currently occupied.
 	 * @param location The location within the field.
 	 */
-	public Bear(boolean randomAge, Field field, Location location)
+	public Fox(boolean randomAge, Field field, Location location)
 	{
 		super(field, location);
 		if(randomAge) {
 			this.age = rand.nextInt(MAX_AGE);
-			this.foodLevel = rand.nextInt(FOX_FOOD_SIZE);
-			this.foodLevel1 = rand.nextInt(RABBIT_FOOD_SIZE);
+			this.foodLevel = rand.nextInt(RABBIT_FOOD_VALUE);
 		}
 		else {
 			this.age = 0;
-			this.foodLevel = FOX_FOOD_SIZE;
-			this.foodLevel1 = RABBIT_FOOD_SIZE;
+			this.foodLevel = RABBIT_FOOD_VALUE;
 		}
 	}
 
@@ -70,12 +66,12 @@ public class Bear extends Animal
 	 * @param newFoxes A list to add newly born foxes to.
 	 */
 	@Override
-	public void act(List<Actor> newBears)
+	public void act(List<Actor> newFoxes)
 	{
 		super.incrementAge();
 		incrementHunger();
 		if(isAlive()) {
-			giveBirth(newBears);
+			giveBirth(newFoxes);
 			// Move towards a source of food if found.
 			Location location = getLocation();
 			Location newLocation = findFood(location);
@@ -108,21 +104,12 @@ public class Bear extends Animal
 		while(it.hasNext()) {
 			Location where = it.next();
 			Object animal = field.getObjectAt(where);
-			if(animal instanceof Fox) {
-				Fox fox = (Fox) animal;
-				if(fox.isAlive()) {
-					fox.setDead();
-					this.foodLevel = FOX_FOOD_SIZE;
-					// Remove the dead fox from the field.
-					return where;
-				}
-			}
 			if(animal instanceof Rabbit) {
 				Rabbit rabbit = (Rabbit) animal;
 				if(rabbit.isAlive()) {
 					rabbit.setDead();
-					this.foodLevel1 = RABBIT_FOOD_SIZE;
-					// Remove the dead fox from the field.
+					this.foodLevel = RABBIT_FOOD_VALUE;
+					// Remove the dead rabbit from the field.
 					return where;
 				}
 			}
@@ -133,25 +120,20 @@ public class Bear extends Animal
 	/**
 	 * Check whether or not this fox is to give birth at this step.
 	 * New births will be made into free adjacent locations.
-	 * @param newFoxes A list to add newly born foxes to.
+	 * @param newActors A list to add newly born foxes to.
 	 */
-	private void giveBirth(List<Actor> newBears)
+	private void giveBirth(List<Actor> newFoxes)
 	{
-		// New bears are born into adjacent locations.
+		// New foxes are born into adjacent locations.
 		// Get a list of adjacent free locations.
 		Field field = getField();
 		List<Location> free = field.getFreeAdjacentLocations(getLocation());
 		int births = breed();
 		for(int b = 0; b < births && free.size() > 0; b++) {
 			Location loc = free.remove(0);
-			Bear young = new Bear(false, field, loc);
-			newBears.add(young);
+			Fox young = new Fox(false, field, loc);
+			newFoxes.add(young);
 		}
-	}
-
-	@Override
-	protected int getFoodlevel(){
-		return this.foodLevel;
 	}
 
 	@Override
@@ -172,4 +154,10 @@ public class Bear extends Animal
 	protected int getMaxAge(){
 		return MAX_AGE;
 	}
+
+	@Override
+	protected int getFoodlevel() {
+		return this.foodLevel;
+	}
+
 }

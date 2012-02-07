@@ -1,19 +1,26 @@
 package vk;
 
-import vk.simulator.Simulator;
+import vk.main.Main;
+
+/**
+ * Tester for the application
+ * @author Pim
+ *
+ */
 
 public class Tester {
 
-	private static int heigth = 0;
-	private static int width = 0;
-	static Simulator sim;
-
+	static Main main;
+	@SuppressWarnings("unused")
+	private static int heigth;
+	@SuppressWarnings("unused")
+	private static int width;
 	public static void main(String[] args){
 		if (args.length==2){
-			heigth = Integer.parseInt(args[0]);
-			width = Integer.parseInt(args[1]);
+			 heigth = Integer.parseInt(args[0]);
+			 width = Integer.parseInt(args[1]);
 		}
-		sim = new Simulator(heigth,width);
+		main = new Main();
 		
 	}
 }

@@ -1,8 +1,7 @@
-package vk.animals;
+package vk.actor;
 import java.util.List;
 import java.util.Random;
 
-import vk.actor.Actor;
 import vk.simulator.Randomizer;
 import vk.view.Field;
 import vk.view.Location;

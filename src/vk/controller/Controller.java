@@ -2,18 +2,18 @@ package vk.controller;
 
 import javax.swing.*;
 
-import vk.main.Main;
+import vk.exception.RunException;
 import vk.model.Model;
-import vk.simulator.Simulator;
 import vk.view.Legenda;
 
 import java.awt.GridLayout;
 import java.awt.event.*;
 
 /**
+ * The class Controller handles all the events and creates all the buttons related to the view
  *
  * @author Pim Vellinga
- * @version 0.0
+ * @version 1.0
  */
 
 @SuppressWarnings("serial")
@@ -24,6 +24,10 @@ public class Controller extends AbstractController implements ActionListener {
 	
 	public static int toRun = 0;
 	
+	/**
+	 * Creates a new controller with a reference to the model
+	 * @param newModel
+	 */
 	public Controller(Model newModel) {
 		super(newModel);
 
@@ -33,7 +37,7 @@ public class Controller extends AbstractController implements ActionListener {
 	}
 
 	/**
-	 * Makes a JPanel with a BoxLayout.
+	 * Creates the panel on the left, containing all the buttons used in the Simulator.
 	 * Contains buttons
 	 *
 	 * @return JPanel
@@ -95,8 +99,9 @@ public class Controller extends AbstractController implements ActionListener {
 	}
 	
 	/**
-	 * Creates a JPanel with a BoxLayout to facilitate the Graphics
-	 * @return
+	 * Creates the panel on the right, needed to display the Graphics
+	 * 
+	 * @return JPanel
 	 */
 	
 	public JPanel makeEastBorder(){
@@ -116,7 +121,7 @@ public class Controller extends AbstractController implements ActionListener {
 	}
 	
 	/**
-	 * Makes the menubar
+	 * Creates the menubar
 	 *
 	 * @return JMenuBar
 	 */
@@ -140,6 +145,8 @@ public class Controller extends AbstractController implements ActionListener {
 	
 	/**
 	 * Handles the events for every action performed
+	 * 
+	 * @throws RunException when an error occurs
 	 */
 
 	@Override
@@ -150,7 +157,7 @@ public class Controller extends AbstractController implements ActionListener {
 			this.model.simulateOneStep();
 		}
 		if(e.getActionCommand() == "Step 100"){
-			this.model.simulate(100);
+			this.model.runApplication(100);
 		}
 		if(e.getActionCommand() == "Simuleer"){
 			try{
@@ -171,10 +178,20 @@ public class Controller extends AbstractController implements ActionListener {
 				exc.printStackTrace();
 				System.out.println("Voer een positief getal in!");
 			}
-			if (!model.run) model.runApplication();
+			if (!model.run)
+				try {
+					model.runApplication();
+				} catch (RunException e1) {
+					e1.printStackTrace();
+				}
 		}
 		if (e.getActionCommand() == "Start"){
-			if (! model.run) model.runApplication();
+			if (! model.run)
+				try {
+					model.runApplication();
+				} catch (RunException e1) {
+					e1.printStackTrace();
+				}
 		}
 		if (e.getActionCommand() == "Stop"){
 			if (model.run) model.stop();
@@ -191,7 +208,7 @@ public class Controller extends AbstractController implements ActionListener {
 		//--- Menu items
 		
 		if (e.getActionCommand() == "Legenda"){
-			Legenda lgd = new Legenda(new JFrame(), "Legenda");
+			new Legenda(new JFrame(), "Legenda");
 		}
 		if(e.getActionCommand() == "Afsluiten"){
 			System.exit(0);

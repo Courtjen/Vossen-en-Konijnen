@@ -2,7 +2,6 @@ package vk.actor;
 import java.util.List;
 import java.util.Random;
 
-import vk.animals.Animal;
 import vk.simulator.Randomizer;
 import vk.view.Field;
 import vk.view.Location;
@@ -10,6 +9,8 @@ import vk.view.Location;
 public class Hunter extends Human {
 	private final int MAX_KILLS = 3;
 	private static final Random rand = Randomizer.getRandom();
+	
+	private int kills = 0;
 
 	/**
 	 * Create a new animal at location in field.
@@ -20,7 +21,7 @@ public class Hunter extends Human {
 	public Hunter(boolean randomAge, Field field, Location location)
 	{
 		super(field, location);
-		if (randomAge) this.age = rand.nextInt();
+		if (randomAge) age = rand.nextInt();
 	}
 
 	/**
@@ -48,7 +49,10 @@ public class Hunter extends Human {
 				setDead();
 			}
 		}
-		else setDead();
+		
+		else {
+			setDead();
+		}
 	}
 
 	/**
@@ -61,18 +65,32 @@ public class Hunter extends Human {
 		Field currentField = getField();
 		List<Location> adjacent = currentField.adjacentLocations(getLocation());
 
-		for (int i=0; i<this.MAX_KILLS; i++) {
+		for (int i=0; i< MAX_KILLS; i++) {
+			
 			Location targetLocation = getRandomLocation(adjacent);
 
-			Object object = currentField.getObjectAt(targetLocation);
+			Actor actor = field.getActor(targetLocation);
 
-			if(object instanceof Animal) {
-				Animal prey = (Animal) object;
+			if(actor instanceof Animal) {
+				Animal prey = (Animal) actor;
 				if(prey.isAlive()) {
 					prey.setDead();
-					return targetLocation;
+					kills++;
 				}
 			}
+			if(actor instanceof Hunter) {
+				Hunter hunter = (Hunter) actor;
+				if(hunter.isAlive()) {
+					hunter.setDead();
+					kills++;
+				}
+				
+				if(kills >= MAX_KILLS){
+					actor.setDead();
+				}
+			}
+			
+			
 		}
 		return null;
 	}
