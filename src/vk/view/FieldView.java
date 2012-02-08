@@ -2,7 +2,6 @@ package vk.view;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-
 import vk.model.*;
 
 public class FieldView extends AbstractView
@@ -12,11 +11,9 @@ public class FieldView extends AbstractView
 	/**
 	 * Create a new FieldView component.
 	 */
-    public FieldView(AbstractModel model)
+    public FieldView(Model model)
     {
      super(model);
-     setSize(150,200);
-     setVisible(true);
     }
 
     
@@ -29,12 +26,12 @@ public class FieldView extends AbstractView
 	{
 		if(this.fieldImage != null) {
 			Dimension currentSize = getSize();
-			if(this.size.equals(currentSize)) {
-				g1.drawImage(this.fieldImage, 0, 0, null);
+			if(size.equals(currentSize)) {
+				g1.drawImage(fieldImage, 0, 0, null);
 			}
 			else {
 				// Rescale the previous image.
-				g1.drawImage(this.fieldImage, 0, 0, currentSize.width, currentSize.height, null);
+				g1.drawImage(fieldImage, 0, 0, currentSize.width, currentSize.height, null);
 			}
 		}
 	}

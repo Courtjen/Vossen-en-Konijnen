@@ -1,6 +1,5 @@
-package vk;
+package vk.main;
 
-import vk.main.Main;
 
 /**
  * Tester for the application

@@ -1,7 +1,7 @@
 package vk.view;
 import java.util.HashMap;
 
-import vk.simulator.Counter;
+import vk.actor.Counter;
 
 /**
  * This class collects and provides some statistical data on the state 
@@ -129,5 +129,17 @@ public class FieldStats
         }
         countsValid = true;
     }
+    
+    /**
+     * Returns the number of actors
+     * @param actor
+     * @return the number of actors
+     */
+
+	public float getCount(Class<?> actor) {
+		Counter count = counters.get(actor);
+        return count.getCount();
+	}
+
 }
 

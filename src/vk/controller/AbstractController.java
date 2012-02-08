@@ -2,7 +2,7 @@ package vk.controller;
 
 import javax.swing.*;
 
-import vk.model.Model;
+import vk.model.*;
 
 public abstract class AbstractController extends JPanel {
 
@@ -11,6 +11,6 @@ public abstract class AbstractController extends JPanel {
 	protected Model model;
 
 	public AbstractController(Model newModel) {
-		this.model=newModel;
+		model = newModel;
 	}
 }

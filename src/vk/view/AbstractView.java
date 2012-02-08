@@ -6,33 +6,33 @@ import java.awt.Image;
 
 import javax.swing.*;
 
-import vk.model.AbstractModel;
+import vk.model.Model;
 
 public abstract class AbstractView extends JPanel {
 
+	protected Model model;
 	public Graphics g;
 	public int xScale, yScale;
 
 	protected int gridWidth, gridHeight;
+    protected final int GRID_VIEW_SCALING_FACTOR = 6;
+    
     protected Dimension size;
     protected Image fieldImage;
     
-    protected final int GRID_VIEW_SCALING_FACTOR = 6;
 	
 	private static final long serialVersionUID = 1L;
 
-	protected AbstractModel model;
-
-	public AbstractView(AbstractModel newModel) {
+	public AbstractView(Model newModel) {
 		model = newModel;
-		newModel.addView(this);
+		model.addView(this);
 		
 		size = new Dimension();
-		gridWidth = 100;
-		gridHeight = 100;
+		gridWidth = 125;
+		gridHeight = 125;
 	}
 
-	public AbstractModel getModel() {
+	public Model getModel() {
 		return model;
 	}
 
@@ -41,7 +41,5 @@ public abstract class AbstractView extends JPanel {
 	}
 
 	public void preparePaint() {
-		// TODO Auto-generated method stub
-		
 	}
 }

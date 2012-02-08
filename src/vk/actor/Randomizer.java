@@ -1,4 +1,4 @@
-package vk.simulator;
+package vk.actor;
 import java.util.Random;
 
 /**
@@ -35,6 +35,20 @@ public class Randomizer
         else {
             return new Random();
         }
+    }
+    
+    
+    /**
+     * Generates random integer between min and max
+     * @param min
+     * @param max
+     * @return the number
+     */
+    
+    public static int getRandomInt(int min, int max){
+    	int randomNumber = rand.nextInt(max - min +1) + min;
+    	
+    	return randomNumber;
     }
     
     /**

@@ -5,7 +5,6 @@ import vk.actor.*;
 import vk.controller.Controller;
 import vk.exception.RunException;
 import vk.main.Main;
-import vk.simulator.Randomizer;
 import vk.view.Field;
 import vk.view.FieldStats;
 import vk.view.Location;
@@ -35,10 +34,14 @@ public class Model extends AbstractModel implements Runnable {
     // The probability that a bear will be created in any given grid position.
     private static final double BEAR_CREATION_PROBABILITY = 0.05;
     // The probability that a bear will be created in any given grid position.
-    private static final double HUNTER_CREATION_PROBABILITY = 0.019; 
+    private static final double HUNTER_CREATION_PROBABILITY = 0.008; 
+    // The possibility that grass will be created in any given grid position.
+    private static final double GRASS_CREATION_PROBABILITY = 0.008;
     
-    private static final Color UNKNOWN_COLOR = Color.gray;
+    // Colors used for empty locations.
     private static final Color EMPTY_COLOR = Color.white;
+    // Color used for objects that have no defined color.
+    private static final Color UNKNOWN_COLOR = Color.gray;
 
     
     // List of all the actors
@@ -48,9 +51,9 @@ public class Model extends AbstractModel implements Runnable {
     // The current step of the simulation.
     private int step;
     // A boolean to see wether the application is running or not
-    public boolean run;
+    public boolean run = false;
     // a Hash map to link all the colours to the Actors
-    private LinkedHashMap<Class<Actor>, Color> colors;
+    private LinkedHashMap<Class<?>, Color> colors;
         
     private FieldStats stats;
 	private Main main;
@@ -58,11 +61,11 @@ public class Model extends AbstractModel implements Runnable {
     /**
      * Construct a simulation field with default size.
      */
-    public Model(Main main)
+    public Model(Main newMain)
     {
         this(DEFAULT_DEPTH, DEFAULT_WIDTH);
         
-        this.main = main;
+        main = newMain;
     }
     
     /**
@@ -75,22 +78,25 @@ public class Model extends AbstractModel implements Runnable {
         if(width <= 0 || depth <= 0) {
             System.out.println("The dimensions must be greater than zero.");
             System.out.println("Using default values.");
-            depth = DEFAULT_DEPTH;
-            width = DEFAULT_WIDTH;
+            
+            field = new Field(DEFAULT_DEPTH, DEFAULT_WIDTH);
+        }
+        else {
+        	 field = new Field(depth, width);
         }
         
         actors = new ArrayList<Actor>();
-        field = new Field(depth, width);
-              
+        
         stats = new FieldStats();
         
-        colors = new LinkedHashMap<Class<Actor>, Color>();
+        colors = new LinkedHashMap<Class<?>, Color>();
 
         // Create a view of the state of each location in the fiel
         setColor(Rabbit.class, Color.orange);
         setColor(Fox.class, Color.blue);
         setColor(Bear.class, Color.red);
         setColor(Hunter.class, Color.black);
+        setColor(Grass.class, Color.green);
       }
     
     /**
@@ -187,6 +193,11 @@ public class Model extends AbstractModel implements Runnable {
                     Hunter hunter = new Hunter(true, field, location);
                     actors.add(hunter);
                 }
+                else if(rand.nextDouble() <= GRASS_CREATION_PROBABILITY){
+                	Location location = new Location(row, col);
+                	Grass grass = new Grass(field, location);
+                	actors.add(grass);
+                }
             }
         }
     }
@@ -253,7 +264,7 @@ public class Model extends AbstractModel implements Runnable {
     /**
      * @return The color to be used for a given class of animal.
      */
-    private Color getColor(Class<?> animalClass)
+    public Color getColor(Class<?> animalClass)
     {
     	Color col = colors.get(animalClass);
     	if(col == null) {
@@ -280,14 +291,14 @@ public class Model extends AbstractModel implements Runnable {
 		    			run = true;
 		    			while(run && step < steps){
 		    				simulate(1);
-		    				pause(50);
+		    				pause(75);
 		    			}
 	    			}
 	    			else {
 	    				run = true;
 		    			while(run){
 		    				simulate(1);
-		    				pause(50);
+		    				pause(75);
 		    			}
 	    			}
 	    		}
@@ -348,14 +359,23 @@ public class Model extends AbstractModel implements Runnable {
 	 * @param color
 	 */
 	
-	public void setColor(Class animalClass, Color color)
+	public void setColor(Class<?> animalClass, Color color)
     {
         colors.put(animalClass, color);
     }
 	
+	public float getCount(Class<?> actor){
+		return stats.getCount(actor);
+	}
+	
+	public int getSteps(){
+		return step;
+	}
+	
+	
 	@Override
 	public void run() {
-		run=true;
+		run = true;
 		while(run) {
 			simulate(1);
 			notifyViews();

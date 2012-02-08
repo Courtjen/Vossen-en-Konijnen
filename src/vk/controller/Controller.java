@@ -19,7 +19,9 @@ import java.awt.event.*;
 @SuppressWarnings("serial")
 public class Controller extends AbstractController implements ActionListener {
 
+	private JButton btnStart1, btnStart100, btnSimuleer, btnStart, btnStop, btnReset;
 	private JTextField aantalStappen;
+	
 	private String steps;
 	
 	public static int toRun = 0;
@@ -53,8 +55,7 @@ public class Controller extends AbstractController implements ActionListener {
 		JButton btnStart100 = new JButton("Step 100");
 		btnStart100.addActionListener(this);
 		
-		this.aantalStappen = new JTextField();
-		steps = aantalStappen.getText();
+		aantalStappen = new JTextField();
 		
 		JButton btnSimuleer = new JButton("Simuleer");
 		btnSimuleer.addActionListener(this);

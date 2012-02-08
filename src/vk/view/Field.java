@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import vk.actor.Actor;
-import vk.simulator.Randomizer;
+import vk.actor.Randomizer;
 
 /**
  * Represent a rectangular grid of field positions.
@@ -33,7 +33,7 @@ public class Field
     {
         this.depth = depth;
         this.width = width;
-        field = new Object[depth][width];
+        field = new Object[this.depth][this.width];
     }
     
     /**
@@ -205,18 +205,6 @@ public class Field
     public int getWidth()
     {
         return width;
-    }
-    
-    /**
-     * Returns the actor at the given location
-     * @param location
-     * @return actor
-     */
-
-    public Actor getActor(Location location)
-    {
-        Actor actor = (Actor) getObjectAt(location.getRow(), location.getCol());
-        return actor;
     }
 }
 

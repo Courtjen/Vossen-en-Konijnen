@@ -8,19 +8,20 @@ import vk.view.Location;
 
 public abstract class Human implements Actor {
 
+	// The age of a Human
 	protected int age;
-
 	// Whether the animal is alive or not.
 	protected boolean alive;
 	// The animal's field.
-	protected Field field;
+	private Field field;
 	// The animal's position in the field.
 	private Location location;
+	
 
 	public Human(Field fieldInput, Location locationInput)
 	{
 		alive = true;
-		this.field = fieldInput;
+		field = fieldInput;
 		setLocation(locationInput);
 		age = 0;
 	}
@@ -54,7 +55,7 @@ public abstract class Human implements Actor {
 	{
 		alive = false;
 		if(location != null) {
-			this.field.clear(this.location);
+			field.clear(location);
 			location = null;
 			field = null;
 		}
@@ -66,7 +67,7 @@ public abstract class Human implements Actor {
 	 */
 	public Location getLocation()
 	{
-		return this.location;
+		return location;
 	}
 
 	/**
@@ -75,7 +76,7 @@ public abstract class Human implements Actor {
 	 */
 	public Field getField()
 	{
-		return this.field;
+		return field;
 	}
 
 	/**
@@ -85,9 +86,9 @@ public abstract class Human implements Actor {
 	protected void setLocation(Location newLocation)
 	{
 		if(this.location != null) {
-			this.field.clear(this.location);
+			field.clear(location);
 		}
-		this.location = newLocation;
-		this.field.place(this, newLocation);
+		location = newLocation;
+		field.place(this, newLocation);
 	}
 }
